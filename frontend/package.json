@@ -4,7 +4,8 @@
   "private": true,
   "description": "Placeholder for React/Vue frontend",
   "scripts": {
-    "start": "echo \"Run your frontend build here\""
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -12,5 +13,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
     "prettier": "^3.5.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
   }
 }

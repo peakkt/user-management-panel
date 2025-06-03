@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "description": "Placeholder for Node.js/Express backend",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node index.js"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -17,6 +18,8 @@
     "prettier": "^3.5.3"
   },
   "devDependencies": {
-    "prisma": "^6.9.0"
+    "prisma": "^6.9.0",
+    "typescript": "^5.4.5",
+    "@types/express": "^4.17.21"
   }
 }
