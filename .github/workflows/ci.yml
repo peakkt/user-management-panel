@@ -1,47 +1,50 @@
-name: CI
+  name: CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
+  on:
+    push:
+      branches: [main]
+    pull_request:
 
-jobs:
-  lint-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  jobs:
+    lint-test:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+        - name: Setup Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '18'
 
-      - name: Install frontend dependencies
-        run: npm ci
-        working-directory: frontend
+        - name: Install root dependencies
+          run: npm ci
 
-      - name: Install backend dependencies
-        run: npm ci
-        working-directory: backend
+        - name: Install frontend dependencies
+          run: npm ci
+          working-directory: frontend
 
-      - name: Install Husky
-        run: npx husky install
+        - name: Install backend dependencies
+          run: npm ci
+          working-directory: backend
 
-      - name: Run lint-staged
-        run: npx lint-staged
+        - name: Configure git hooks
+          run: git config core.hooksPath .husky
 
-      - name: Lint frontend
-        run: npm run lint
-        working-directory: frontend
+        - name: Run lint-staged
+          run: npx --no-install lint-staged
 
-      - name: Test frontend
-        run: npm test
-        working-directory: frontend
+        - name: Lint frontend
+          run: npm run lint
+          working-directory: frontend
 
-      - name: Lint backend
-        run: npm run lint
-        working-directory: backend
+        - name: Test frontend
+          run: npm test
+          working-directory: frontend
 
-      - name: Test backend
-        run: npm test
-        working-directory: backend
+        - name: Lint backend
+          run: npm run lint
+          working-directory: backend
+
+        - name: Test backend
+          run: npm test
+          working-directory: backend
