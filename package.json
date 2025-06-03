@@ -5,7 +5,7 @@
   "description": "",
   "license": "MIT",
   "scripts": {
-    "prepare": "git config core.hooksPath .husky"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

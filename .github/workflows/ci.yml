@@ -28,7 +28,7 @@
           working-directory: backend
 
         - name: Configure git hooks
-          run: git config core.hooksPath .husky
+          run: npx --no-install husky
 
         - name: Run lint-staged
           run: npx --no-install lint-staged
