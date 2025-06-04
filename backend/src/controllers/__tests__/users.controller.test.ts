@@ -19,11 +19,16 @@ describe('users.controller', () => {
 
   it('returns users', async () => {
     const req = {} as any;
-    (prisma.user.findMany as jest.Mock).mockResolvedValue([{ id: '1' }]);
+    (prisma.user.findMany as jest.Mock).mockResolvedValue([
+      { id: '1', password: 'secret' },
+    ]);
 
     await getUsers(req, res);
 
-    expect(res.json).toHaveBeenCalledWith([{ id: '1' }]);
+    expect(res.json).toHaveBeenCalled();
+    const users = (res.json as jest.Mock).mock.calls[0][0];
+    expect(users[0]).toEqual(expect.objectContaining({ id: '1' }));
+    expect(users[0]).not.toHaveProperty('password');
   });
 
   describe('deleteUser', () => {
@@ -57,10 +62,12 @@ describe('users.controller', () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue({
         id: '1',
         isBlocked: false,
+        password: 'hash',
       });
       (prisma.user.update as jest.Mock).mockResolvedValue({
         id: '1',
         isBlocked: true,
+        password: 'hash',
       });
 
       await blockUser(req, res, next);
@@ -69,6 +76,8 @@ describe('users.controller', () => {
         message: 'User blocked successfully',
         user: { id: '1', isBlocked: true },
       });
+      const user = (res.json as jest.Mock).mock.calls[0][0].user;
+      expect(user).not.toHaveProperty('password');
     });
 
     it('fails when user not found', async () => {
@@ -101,10 +110,12 @@ describe('users.controller', () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue({
         id: '1',
         isBlocked: true,
+        password: 'hash',
       });
       (prisma.user.update as jest.Mock).mockResolvedValue({
         id: '1',
         isBlocked: false,
+        password: 'hash',
       });
 
       await unblockUser(req, res, next);
@@ -113,6 +124,8 @@ describe('users.controller', () => {
         message: 'User unblocked successfully',
         user: { id: '1', isBlocked: false },
       });
+      const user = (res.json as jest.Mock).mock.calls[0][0].user;
+      expect(user).not.toHaveProperty('password');
     });
 
     it('fails when user not found', async () => {
