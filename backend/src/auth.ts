@@ -50,3 +50,23 @@ export async function authenticate(
     return res.status(401).json({ error: 'Invalid token' });
   }
 }
+
+export async function checkNotBlocked(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  if (!req.userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: req.userId } });
+  if (!user) {
+    return res.status(401).json({ error: 'User not found' });
+  }
+  if (user.isBlocked) {
+    return res.status(403).json({ error: 'User is blocked' });
+  }
+
+  next();
+}
