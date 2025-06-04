@@ -1,31 +1,40 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import prisma from '@/utils/prisma';
 import { AuthRequest } from '@/middleware/auth';
+import { HttpError } from '@/middleware/errorHandler';
 
 export async function getUsers(_req: AuthRequest, res: Response) {
   const users = await prisma.user.findMany();
   res.json(users);
 }
 
-export async function deleteUser(req: AuthRequest, res: Response) {
+export async function deleteUser(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     await prisma.user.delete({ where: { id: req.params.id } });
     res.json({ message: 'User deleted successfully' });
   } catch {
-    res.status(404).json({ error: 'User not found' });
+    next(new HttpError(404, 'User not found'));
   }
 }
 
-export async function blockUser(req: Request, res: Response) {
+export async function blockUser(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const target = await prisma.user.findUnique({
       where: { id: req.params.id },
     });
     if (!target) {
-      return res.status(404).json({ error: 'User not found' });
+      return next(new HttpError(404, 'User not found'));
     }
     if (target.isBlocked) {
-      return res.status(400).json({ error: 'User already blocked' });
+      return next(new HttpError(400, 'User already blocked'));
     }
     const user = await prisma.user.update({
       where: { id: req.params.id },
@@ -33,20 +42,24 @@ export async function blockUser(req: Request, res: Response) {
     });
     res.json({ message: 'User blocked successfully', user });
   } catch {
-    res.status(500).json({ error: 'Internal server error' });
+    next(new HttpError(500, 'Internal server error'));
   }
 }
 
-export async function unblockUser(req: Request, res: Response) {
+export async function unblockUser(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const target = await prisma.user.findUnique({
       where: { id: req.params.id },
     });
     if (!target) {
-      return res.status(404).json({ error: 'User not found' });
+      return next(new HttpError(404, 'User not found'));
     }
     if (!target.isBlocked) {
-      return res.status(400).json({ error: 'User is not blocked' });
+      return next(new HttpError(400, 'User is not blocked'));
     }
     const user = await prisma.user.update({
       where: { id: req.params.id },
@@ -54,6 +67,6 @@ export async function unblockUser(req: Request, res: Response) {
     });
     res.json({ message: 'User unblocked successfully', user });
   } catch {
-    res.status(500).json({ error: 'Internal server error' });
+    next(new HttpError(500, 'Internal server error'));
   }
 }
