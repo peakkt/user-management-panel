@@ -10,6 +10,7 @@ module.exports = {
         project: [
             __dirname + '/backend/tsconfig.json',
             __dirname + '/frontend/tsconfig.json',
+            __dirname + '/frontend/tsconfig.node.json',
         ],
         tsconfigRootDir: __dirname,
     },

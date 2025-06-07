@@ -7,6 +7,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "lib": ["DOM", "ES2018"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
