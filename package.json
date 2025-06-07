@@ -12,6 +12,10 @@
     "@commitlint/config-conventional": "^19.8.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "eslint-config-prettier": "^9.1.0"
   }
 }

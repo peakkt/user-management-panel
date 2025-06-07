@@ -5,9 +5,9 @@
   "description": "Placeholder for Node.js/Express backend",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
-    "lint": "prettier --check .",
+    "lint": "eslint . --ext .ts && prettier --check .",
     "test": "jest --config jest.config.ts",
     "prisma": "prisma generate"
   },
@@ -34,6 +34,11 @@
     "prisma": "^6.9.0",
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "tsc-alias": "^1.8.16",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "eslint-config-prettier": "^9.1.0"
   }
 }
